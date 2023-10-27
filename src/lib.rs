@@ -368,11 +368,7 @@ macro_rules! self_cell {
                 let layout = $crate::alloc::alloc::Layout::new::<JoinedCell>();
                 assert!(layout.size() != 0);
 
-                let joined_void_ptr = NonNull::new($crate::alloc::alloc::alloc(layout)).unwrap();
-
-                let mut joined_ptr = core::mem::transmute::<NonNull<u8>, NonNull<JoinedCell>>(
-                    joined_void_ptr
-                );
+                let joined_ptr = NonNull::new($crate::alloc::alloc::alloc(layout).cast::<JoinedCell>()).unwrap();
 
                 let (owner_ptr, dependent_ptr) = JoinedCell::_field_pointers(joined_ptr.as_ptr());
 
